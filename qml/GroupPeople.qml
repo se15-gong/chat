@@ -33,6 +33,7 @@ ListPage {
     listView.anchors.bottomMargin: inputBox.height
     listView.header: VisibilityRefreshHandler {
         onRefresh: loadTimer.start()
+        opacity: 0
     }
 
     //fake loading with timer
