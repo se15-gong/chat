@@ -1,8 +1,8 @@
 import VPlayApps 1.0
 import QtQuick 2.0
+import QtQuick.Controls 1.2
 
 Page {
-
     id:mainpage
     Component{id:profile; PersonalPage{}}
     Component{id:people; PeoplePage{} }
@@ -10,6 +10,9 @@ Page {
 
     Navigation{
         id:navigation
+        drawer.drawerPosition: drawer.drawerPositionLeft
+        headerView: NavHeader {}
+        footerView: Bottom {}
 
         NavigationItem{
             title: "Recent"
