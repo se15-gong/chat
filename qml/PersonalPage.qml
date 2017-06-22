@@ -16,9 +16,9 @@ Page{
               spacing: parent.spacing
 
               ListPage {
-                model: [{ type: "Theme setting",   },
+                model: [{ type: "Theme setting", text:"color"  },
 
-                  { type: "Text color", text: "Apple" },
+                  { type: "Text color", text: "" },
                   { type: "About me", text: "This software is written by 15se" }]
                 section.property: "type"
               }
