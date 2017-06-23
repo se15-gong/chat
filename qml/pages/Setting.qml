@@ -128,7 +128,7 @@ Row{
            Theme.colors.statusBarStyle = Theme.colors.statusBarStyleWhite
          }
          else {
-           // default setting
+
            Theme.tabBar.titleColor = Qt.binding(function() { return Theme.isAndroid ? Theme.navigationBar.itemColor : Theme.tintColor })
            Theme.tabBar.titleOffColor = Qt.binding(function() { return Theme.isAndroid ? Qt.lighter(Theme.colors.tintColor, 1.5) : Theme.disabledColor })
            Theme.tabBar.backgroundColor = Qt.binding(function() { return Theme.isAndroid ? Theme.colors.tintColor : "#f8f8f8"})
