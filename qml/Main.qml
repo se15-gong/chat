@@ -3,6 +3,7 @@ import QtQuick 2.0
 
 
 App {
+
     onInitTheme: {
         Theme.colors.tintColor = "#1AD6FD"
 

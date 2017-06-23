@@ -7,43 +7,68 @@ import "widgets"
 import "model"
 
 Page {
-    id:mainpage
-    Component{id:profile; PersonalPage{}}
-    Component{id:people; PeoplePage{} }
-    Component{id:recent; RecentPage{}}
-    Component { id: profilePageComponent; ProfilePage { } }
-    Component { id: detailPageComponent; DetailPage { } }
+    id: mainpage
+    Component {
+        id: profile
+        PersonalPage {
+        }
+    }
+    Component {
+        id: people
+        PeoplePage {
+        }
+    }
+    Component {
+        id: recent
+        RecentPage {
+        }
+    }
+    Component {
+        id: profilePageComponent
+        ProfilePage {
+        }
+    }
+    Component {
+        id: detailPageComponent
+        DetailPage {
+        }
+    }
 
     property alias navigation: navigation
 
-    Navigation{
-        id:navigation
+    Navigation {
+        id: navigation
         drawer.drawerPosition: drawer.drawerPositionLeft
-        headerView: NavHeader {}
-        footerView: Bottom {}
+        headerView: NavHeader {
+        }
+        footerView: Bottom {
+        }
 
-        NavigationItem{
+        NavigationItem {
             title: "Recent"
             icon: IconType.clocko
             NavigationStack {
-                RecentPage{}
+                RecentPage {
+                }
             }
         }
 
-        NavigationItem{
-            title:  "People"
+        NavigationItem {
+            title: "People"
             icon: IconType.user
             NavigationStack {
-                id:peoplestack
-                PeoplePage{}
+                id: peoplestack
+                PeoplePage {
+                }
             }
         }
 
-        NavigationItem{
+        NavigationItem {
             title: "Me"
-            icon: IconType.github
-            NavigationStack{
-                PersonalPage{}
+            icon: IconType.githubalt
+            NavigationStack {
+                PersonalPage {
+                }
             }
         }
     }
