@@ -9,7 +9,7 @@ import "../pages"
 ListPage{
 
     readonly property real barHeight: dp(Theme.navigationBar.height) + Theme.statusBarHeight
-    navigationBarTranslucency: 1.0
+    navigationBarTranslucency: 0.0
     listView.anchors.topMargin: barHeight
     Rectangle {
         id: background
