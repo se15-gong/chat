@@ -155,30 +155,6 @@ Item {
       }
     }
 
-//    RoundedImage {
-//      id: image
-
-//      fillMode: Image.PreserveAspectCrop
-//      visible: cell.image.length > 0 && !img.error
-
-//      source: cell.image
-
-//      Layout.columnSpan: 3
-//      Layout.fillWidth: true
-//      Layout.preferredWidth: contentText.width
-//      Layout.preferredHeight: dp(320)
-//      Layout.maximumWidth: contentText.width
-//      Layout.maximumHeight: dp(160)
-
-//      MouseArea {
-//        anchors.fill: parent
-
-//        onClicked: {
-//          PictureViewer.show(app, image.source)
-//        }
-//      }
-//    }
-
     // actions
     Row {
       visible: !actionsHidden
@@ -231,16 +207,6 @@ Item {
         font.pixelSize: sp(13)
       }
     }
-
-//    Item {
-//      id: bottomSpacer
-
-//      width: parent.width
-//      height: dp(6)
-
-//      Layout.columnSpan: parent.columns
-//      Layout.fillWidth: true
-//    }
   }
 
   // Bottom cell divider

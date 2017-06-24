@@ -5,9 +5,12 @@ import QtGraphicalEffects 1.0
 
 import "../model"
 import "../widgets"
+import "../pages"
 
 ListPage {
     id: profilePage
+
+    property var additem: chatrow.item
 
     title: qsTr("Profile")
     property var time: alldata[currentIndex]
@@ -48,16 +51,6 @@ ListPage {
     readonly property real barHeight: dp(Theme.navigationBar.height) + Theme.statusBarHeight
 
 
-    // Image header
-    // Background color placeholder
-//    property var time: alldata[currentIndex]
-//    property int currentIndex: 0
-
-//    property var alldata: [
-//        { t: 1,  },
-//        { t: 3,  }
-//    ]
-
     Rectangle {
         id: topImage
 
@@ -67,16 +60,16 @@ ListPage {
                -Math.min(listView.contentY + listView.headerItem.height, height - barHeight) : 0
 
 
-         gradient: Gradient {
+        gradient: Gradient {
             GradientStop {
                 position: 0
-                color: time.t < 2 ? "black" : "white"
+                color: time.t < 2 ? "white" : "blue"
 
                 Behavior on color { ColorAnimation { duration: 1000 } }
             }
             GradientStop {
                 position: 1
-                color: time.t < 2 ? "black" : "white"
+                color: time.t < 2 ? "white" : "blue"
 
                 Behavior on color { ColorAnimation { duration: 1500 } }
             }
@@ -86,49 +79,21 @@ ListPage {
         width: parent.width
         height: dp(140)
 
-        //    Image {
-        //      id: imgHeader
-        //      source: !!profile && !!profile.profile_banner_url ? profile.profile_banner_url : ""
-        //      anchors.fill: parent
-        //      fillMode: Image.PreserveAspectCrop
-        //      visible: true
-        //    }
-
-        //    FastBlur {
-        //      source: imgHeader
-        //      anchors.fill: imgHeader
-        //      radius: 64 * Math.max(0, Math.min(1, (listView.contentY * 0.5 + topImage.height) / listView.headerItem.contentHeight))
-        //    }
-
         // Profile image
         RoundedImage {
             id: profileImage
-            //   source: !!profile && !!profile.profile_image_url ? profile.profile_image_url.replace("_normal", "_bigger") : ""
-
-            //                  x: dp(10)
-            //                  y: -(height / 4) + parent.height
-            //                  width: dp(50)
-            //                  height: dp(50)
-
 
             opacity: Math.max(0, Math.min(1, -(listView.contentY + topImage.height) / topImage.height))
             scale: opacity
-
-            //border.color: "blue"
-            //border.width: dp(2)
-            // backgroundColor: "yellow"
         }
     }
 
     listView {
-        //    emptyText.text: qsTr("No tweets")
 
         header: Column {
             id: contentColumn
 
             width: parent.width
-
-            // property real contentHeight: height - topImage.height
 
             //   Spacer for image header
             Item {
@@ -278,9 +243,102 @@ ListPage {
         width: parent.width
         //    height: dp(140)
         y:parent.height - height
-
-
     }
 
+    Row{
+        anchors.bottom: parent.bottom
+        width: parent.width
+        height: dp(50)
+        Rectangle {
+            id: annoyingAd
+            width: parent.width / 2
 
+            height: dp(50)
+
+            // Just one line for handling visiblity of the ad banner, you can use property binding for this!
+            //   visible: !noadsGood.purchased
+//            gradient: Gradient {
+//                GradientStop {
+//                    position: 0
+//                    color: time.t < 2 ? "blue" : "white"
+
+//                    Behavior on color { ColorAnimation { duration: 1000 } }
+//                }
+//                GradientStop {
+//                    position: 1
+//                    color: time.t < 2 ? "blue" : "white"
+
+//                    Behavior on color { ColorAnimation { duration: 1500 } }
+//                }
+//            }
+
+            Text {
+                id:chattext
+                text: "CHAT"
+                font.pixelSize: dp(20)
+                color: "blue"
+                anchors.centerIn: parent
+
+            }
+            SimpleRow{
+                id:chatrow
+                anchors.fill: parent
+                opacity: 0
+                text: "CHAT"
+
+                onSelected:  {
+                    navigationStack.push(gpcomponent,item)
+                    chattext.color = "blue"
+                    addtext.color = "grey"
+
+                }
+
+                Component{id:gpcomponent;GroupPeople{}}
+            }
+        }
+
+
+        Rectangle {
+            id:addfrind
+            //    anchors.bottom: parent.BottomRight
+            width: parent.width/2
+            height: dp(50)
+            Text {
+                id:addtext
+                text: "ADD"
+                font.pixelSize: dp(20)
+                color: "grey"
+
+                anchors.centerIn: parent
+
+            }
+
+//            gradient: Gradient {
+//                GradientStop {
+//                    position: 0
+//                    color: time.t > 2 ? "blue" : "grey"
+
+//                    Behavior on color { ColorAnimation { duration: 1000 } }
+//                }
+//                GradientStop {
+//                    position: 1
+//                    color: time.t > 2 ? "blue" : "grey"
+
+//                    Behavior on color { ColorAnimation { duration: 1500 } }
+//                }
+//            }
+
+            AppButton{
+                anchors.fill: parent
+                opacity: 0
+                onClicked:  {
+                    DataModel.friendadd(profile)
+                    addtext.color = "blue"
+                    chattext.color = "grey"
+                    navigationStack.push(gp,profile)
+                }
+                Component{id:gp;PeoplePage{}}
+            }
+        }
+    }
 }

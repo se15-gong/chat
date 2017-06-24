@@ -95,46 +95,6 @@ Page {
       }
     }
 
-//    RoundedImage {
-//      id: contentImage
-
-//      fillMode: Image.PreserveAspectCrop
-//      visible: tweet.image && tweet.image.length > 0
-
-//      source: tweet.image || ""
-
-//      Layout.columnSpan: 2
-//      Layout.fillWidth: true
-//      Layout.preferredWidth: contentText.width
-//      Layout.preferredHeight: dp(240)
-//      Layout.maximumWidth: contentText.width
-//      Layout.maximumHeight: dp(240)
-
-//      MouseArea {
-//        anchors.fill: parent
-
-//        onClicked: {
-//          PictureViewer.show(app, contentImage.source)
-//        }
-//      }
-//    }
-
-//    Text {
-//      id: timeText
-//      elide: Text.ElideRight
-//      maximumLineCount: 1
-//      color: Theme.secondaryTextColor
-//      font.family: Theme.normalFont.name
-//      font.pixelSize: dp(12)
-//      lineHeight: dp(16)
-//      lineHeightMode: Text.FixedHeight
-//      verticalAlignment: Text.AlignBottom
-//      text: tweet.time || ""
-
-//      Layout.columnSpan: 2
-//      Layout.fillWidth: true
-//    }
-
     // Divider
     Rectangle {
       width: parent.width

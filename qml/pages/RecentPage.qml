@@ -79,7 +79,7 @@ ListPage {
 
     onProfileSelected: {
       console.debug("Selected profile at index:", index)
-      navigationStack.push(profilePageComponent, { profile: row.item.user })
+      navigationStack.push(profilePageComponent, { profile: row.item.user})
     }
   }
 
