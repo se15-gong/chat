@@ -2,12 +2,21 @@ import VPlayApps 1.0
 import QtQuick 2.0
 import QtQuick.Controls 1.2
 import QtGraphicalEffects 1.0
+import QtQuick.LocalStorage 2.0
+import "Database.js" as JS
 import "./pages"
 import "./widgets"
 import "./model"
 
 Page {
     id: mainpage
+    signal isme
+
+    Component.onCompleted: {
+        DataModel.dbInit()
+        console.debug("DB has init.")
+
+    }
     Component {
         id: profile
         PersonalPage {
@@ -29,13 +38,18 @@ Page {
         }
     }
     Component {
+        id: otherprofileComponent
+        OthersPage {
+        }
+    }
+
+    Component {
         id: detailPageComponent
         DetailPage {
         }
     }
 
-//    property alias navigation: navigation
-
+    //    property alias navigation: navigation
     Navigation {
         id: navigation
         drawer.drawerPosition: drawer.drawerPositionLeft

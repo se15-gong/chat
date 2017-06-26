@@ -1,13 +1,18 @@
 ﻿import VPlayApps 1.0
 import QtQuick 2.4
 import QtGraphicalEffects 1.0
-import"../model"
+import QtQuick.LocalStorage 2.0
+import "../Database.js" as JS
+import "../model"
+
 ListPage {
-    id:page
+    id: page
     readonly property real barHeight: dp(Theme.navigationBar.height) + Theme.statusBarHeight
-    property var friend: [
-        { text: "Jin Chen", detailText:"hello!" ,image: Qt.resolvedUrl("portrait0.jpg")}
-    ]
+    //    property var friend: [{
+    //            text: "Jin Chen",
+    //            detailText: "hello!",
+    //            image: Qt.resolvedUrl("portrait0.jpg")
+    //        }]
     navigationBarTranslucency: 1.0
     listView.anchors.topMargin: barHeight
 
@@ -40,19 +45,22 @@ ListPage {
     }
     title: "People"
 
-    titleItem: Icon{
+    titleItem: Icon {
         icon: IconType.user
-        color : "white"
+        color: "white"
         size: dp(24)
     }
 
-    Component{id:gpcomponent;GroupPeople{}}
+    Component {
+        id: gpcomponent
+        GroupPeople {
+        }
+    }
 
-    model:DataModel.friendline
+    model: DataModel.friendline
 
-    delegate:SwipeOptionsContainer
-    {
-        SimpleRow{
+    delegate: SwipeOptionsContainer {
+        SimpleRow {
             image.radius: image.height
             image.fillMode: Image.PreserveAspectCrop
             autoSizeImage: true
@@ -62,11 +70,13 @@ ListPage {
             detailTextItem.elide: Text.ElideRight
 
             onSelected: {
-                navigationStack.push(gpcomponent,{person: item.text})
-                console.debug("f_index:",index)
+                navigationStack.push(gpcomponent, {
+                                         person: item.text
+                                     })
+                console.debug("f_index:", index)
             }
         }
-        rightOption:SwipeButton {
+        rightOption: SwipeButton {
             text: "Exit"
             height: parent.height
             textColor: "white"
@@ -78,4 +88,3 @@ ListPage {
         }
     }
 }
-

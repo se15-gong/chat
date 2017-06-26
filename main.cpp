@@ -1,6 +1,6 @@
 #include <QApplication>
 #include <VPApplication>
-
+#include <QDebug>
 #include <QQmlApplicationEngine>
 
 
@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
     vplay.setPreservePlatformFonts(true);
 
     QQmlApplicationEngine engine;
+    qDebug()<<"Local storage path:"<< engine.offlineStoragePath();
     vplay.initialize(&engine);
 
     // use this during development

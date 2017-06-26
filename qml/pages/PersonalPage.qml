@@ -5,8 +5,7 @@ import QtGraphicalEffects 1.0
 import "../model"
 import "../pages"
 
-
-ListPage{
+ListPage {
 
     readonly property real barHeight: dp(Theme.navigationBar.height) + Theme.statusBarHeight
     navigationBarTranslucency: 1.0
@@ -25,7 +24,7 @@ ListPage{
             fillMode: Image.PreserveAspectCrop
 
             // the blur effect displays the image, we set the source image invisible
-            visible: false
+            visible: true
         }
 
         // apply blur effect
@@ -39,47 +38,48 @@ ListPage{
         }
     }
     title: "Me"
-    titleItem: Icon{
+    titleItem: Icon {
         icon: IconType.github
-        color : "white"
-        size: dp(24)}
-    //icon: IconType.github
+        color: "white"
+        size: dp(24)
+    }
 
-    AppTabBar{
-        id:apptabbar
+    //icon: IconType.github
+    AppTabBar {
+        id: apptabbar
         contentContainer: swipeview
-        background:color = "black"
-        AppTabButton{
+        opacity: 0
+        AppTabButton {
             text: "profile"
             icon: IconType.anchor
-
         }
-        AppTabButton{
+        AppTabButton {
             text: "setting"
             icon: IconType.gear
         }
-
     }
-    QuickControls2.SwipeView{
-        id:swipeview
-        anchors.top:apptabbar.bottom
+    QuickControls2.SwipeView {
+        id: swipeview
+        anchors.top: apptabbar.bottom
         anchors.bottom: parent.bottom
         width: parent.width
         clip: true
 
-        Rectangle{
+        Rectangle {
             NavigationStack {
-                id:profilestack
+                id: profilestack
                 Component.onCompleted: {
-                    push( profilePageComponent , { profile: DataModel.currentProfile })
+
+                    push(profilePageComponent, {
+                             profile: DataModel.currentProfile
+                         })
                 }
             }
         }
-        Rectangle{
-            id:settingpage
-            Setting{}
-
+        Rectangle {
+            id: settingpage
+            Setting {
+            }
         }
     }
 }
-

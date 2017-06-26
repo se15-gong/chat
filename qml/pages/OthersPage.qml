@@ -2,20 +2,17 @@ import QtQuick 2.3
 import VPlayApps 1.0
 
 import QtGraphicalEffects 1.0
+import QtQuick.LocalStorage 2.0
+import "../Database.js" as JS
 
 import "../model"
 import "../widgets"
 import "../pages"
 
 ListPage {
-    id: profilePage
+    id: otherprofile
 
-    //    property var additem: chatrow.item
-
-    // The actual profile data to display
-    property var profile
-
-    readonly property real barHeight: dp(Theme.navigationBar.height) + Theme.statusBarHeight
+    property var additem: chatrow.item
 
     title: qsTr("Profile")
     property var time: alldata[currentIndex]
@@ -37,7 +34,7 @@ ListPage {
         AppText {
             //白色名字  最上方
             anchors.horizontalCenter: Theme.isAndroid ? undefined : parent.horizontalCenter
-            text: profilePage.profile.name
+            text: otherprofile.profile.name
             color: "white"
             font.family: Theme.boldFont.name
             font.bold: true
@@ -48,12 +45,17 @@ ListPage {
             //发的微博数
             anchors.horizontalCenter: Theme.isAndroid ? undefined : parent.horizontalCenter
             text: qsTr("%1 Tweets").arg(
-                      profilePage.profile.statuses_count.toLocaleString(
+                      otherprofile.profile.statuses_count.toLocaleString(
                           Qt.locale(), "f", 0))
             color: "white"
             font.pixelSize: dp(10)
         }
     }
+
+    // The actual profile data to display
+    property var profile
+
+    readonly property real barHeight: dp(Theme.navigationBar.height) + Theme.statusBarHeight
 
     Rectangle {
         id: topImage
@@ -259,5 +261,105 @@ ListPage {
         width: parent.width
         //    height: dp(140)
         y: parent.height - height
+    }
+
+    Row {
+        anchors.bottom: parent.bottom
+        width: parent.width
+        height: dp(50)
+        Rectangle {
+            id: annoyingAd
+            width: parent.width / 2
+
+            height: dp(50)
+
+            // Just one line for handling visiblity of the ad banner, you can use property binding for this!
+            //   visible: !noadsGood.purchased
+            //            gradient: Gradient {
+            //                GradientStop {
+            //                    position: 0
+            //                    color: time.t < 2 ? "blue" : "white"
+
+            //                    Behavior on color { ColorAnimation { duration: 1000 } }
+            //                }
+            //                GradientStop {
+            //                    position: 1
+            //                    color: time.t < 2 ? "blue" : "white"
+
+            //                    Behavior on color { ColorAnimation { duration: 1500 } }
+            //                }
+            //            }
+            Text {
+                id: chattext
+                text: "CHAT"
+                font.pixelSize: dp(20)
+                color: "blue"
+                anchors.centerIn: parent
+            }
+            SimpleRow {
+                id: chatrow
+                anchors.fill: parent
+                opacity: 0
+
+                //                text: "CHAT"
+                onSelected: {
+                    navigationStack.push(gpcomponent, item)
+                    chattext.color = "blue"
+                    addtext.color = "grey"
+                }
+
+                Component {
+                    id: gpcomponent
+                    GroupPeople {
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            id: addfrind
+            //    anchors.bottom: parent.BottomRight
+            width: parent.width / 2
+            height: dp(50)
+            Text {
+                id: addtext
+                text: "ADD"
+                font.pixelSize: dp(20)
+                color: "grey"
+
+                anchors.centerIn: parent
+            }
+
+            //            gradient: Gradient {
+            //                GradientStop {
+            //                    position: 0
+            //                    color: time.t > 2 ? "blue" : "grey"
+
+            //                    Behavior on color { ColorAnimation { duration: 1000 } }
+            //                }
+            //                GradientStop {
+            //                    position: 1
+            //                    color: time.t > 2 ? "blue" : "grey"
+
+            //                    Behavior on color { ColorAnimation { duration: 1500 } }
+            //                }
+            //            }
+            AppButton {
+                anchors.fill: parent
+                opacity: 0
+                onClicked: {
+                    DataModel.friendadd(profile)
+                    addtext.color = "blue"
+                    chattext.color = "grey"
+                    navigationStack.push(gp, profile)
+                    console.debug("DB has insert a new message.")
+                }
+                Component {
+                    id: gp
+                    PeoplePage {
+                    }
+                }
+            }
+        }
     }
 }

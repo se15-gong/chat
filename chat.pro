@@ -44,4 +44,5 @@ macx {
 }
 
 DISTFILES += \
-    qml/pages/Setting.qml
+    qml/pages/Setting.qml \
+    qml/pages/OthersPage.qml

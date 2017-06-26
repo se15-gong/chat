@@ -2,17 +2,22 @@ pragma Singleton
 
 import QtQuick 2.0
 import VPlayApps 1.0
+import QtQuick.LocalStorage 2.0
+import "../Database.js" as JS
 import "../pages"
 
 QtObject {
     id: dataModel
 
-    property var currentProfile   //当前用户
-    property var timeline    //时间线
+    property var currentProfile
+    //当前用户
+    property var timeline
 
-    property var firstTweetData  //第一个推特日期
+    //时间线
+    property var firstTweetData
 
-    property var friendline:[]
+    //第一个推特日期
+    property var friendline: []
 
     // Load default data
     Component.onCompleted: {
@@ -20,7 +25,7 @@ QtObject {
 
         // Profile
         var xhr = new XMLHttpRequest
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE)
                 currentProfile = JSON.parse(xhr.responseText)
         }
@@ -29,7 +34,7 @@ QtObject {
 
         // Feed
         var xhr2 = new XMLHttpRequest
-        xhr2.onreadystatechange = function() {
+        xhr2.onreadystatechange = function () {
             if (xhr2.readyState === XMLHttpRequest.DONE) {
                 var json = JSON.parse(xhr2.responseText)
                 var model = []
@@ -44,8 +49,13 @@ QtObject {
         }
         xhr2.open("GET", Qt.resolvedUrl("../data/feed.json"))
         xhr2.send()
+    }
 
-
+    function isme(profile) {
+        if (currentProfile.name === profile.name)
+            return false
+        else
+            return true
     }
 
     function tweetModel(data) {
@@ -57,7 +67,9 @@ QtObject {
         if (!!data.entities && !!data.entities.urls) {
             for (var j = 0; j < data.entities.urls.length; j++) {
                 var url = data.entities.urls[j]
-                text = text.replace(url.url, "<a href=\"" + url.url + "\">" + url.display_url + "</a>")
+                text = text.replace(
+                            url.url,
+                            "<a href=\"" + url.url + "\">" + url.display_url + "</a>")
             }
         }
 
@@ -80,18 +92,18 @@ QtObject {
         }
 
         return {
-            "name": data.user.name,
-            "handle": "@" + data.user.screen_name,
-            "icon": data.user.profile_image_url.replace("_normal", "_bigger"),
-            "text": text,
-            "image": image,
-            "time": DateFormatter.prettyDateTime(date),
-            "retweet_count": data.retweet_count,
-            "favorite_count": data.favorite_count,
-            "retweeted": data.retweeted,
-            "favorited": data.favorited,
-            "user": data.user,
-            "actionsHidden": undefined // workaround because dynamic add/remove of properties has troubles on iOS with Qt. 5.6.0
+            name: data.user.name,
+            handle: "@" + data.user.screen_name,
+            icon: data.user.profile_image_url.replace("_normal", "_bigger"),
+            text: text,
+            image: image,
+            time: DateFormatter.prettyDateTime(date),
+            retweet_count: data.retweet_count,
+            favorite_count: data.favorite_count,
+            retweeted: data.retweeted,
+            favorited: data.favorited,
+            user: data.user,
+            actionsHidden: undefined // workaround because dynamic add/remove of properties has troubles on iOS with Qt. 5.6.0
         }
     }
 
@@ -103,31 +115,60 @@ QtObject {
         timeline.splice(0, 0, tweetModel(newTweet)) //insert at position 0
         timelineChanged()
     }
-    function friendadd(profile){
+
+    function dbInit() {
+        var db = LocalStorage.openDatabaseSync("FriendList", "",
+                                               "Track exercise", 1000000)
+
+        db.transaction(function (tx) {
+            tx.executeSql(
+                        'CREATE TABLE IF NOT EXISTS friend (chatter_name text,content text)')
+            var results = tx.executeSql('SELECT * FROM friend')
+            for (var i = 0; i < results.rows.length; i++) {
+                var r = {
+                    text: results.rows.item(i).chatter_name,
+                    detailText: results.rows.item(i).content
+                }
+                friendline.push(r)
+                console.debug("read success!")
+            }
+        })
+    }
+
+    function friendadd(profile) {
         var isadd = true
-        for(var i =0; i< friendline.length;i++)
-        {
-            if(profile.name === friendline[i].text)
-            {
-                isadd = false;
-                console.debug("The friend has existed!");
+        for (var i = 0; i < friendline.length; i++) {
+            if (profile.name === friendline[i].text) {
+                isadd = false
+                console.debug("The friend has existed!")
             }
         }
-        if(isadd)
-        {
-            var newItem = {                   text:profile.name,detailText:profile.description,image:Qt.resolvedUrl("user_default.png") }
+        if (isadd) {
+            var newItem = {
+                text: profile.name,
+                detailText: profile.description
+                // image: Qt.resolvedUrl("user_default.png")
+            }
+
+            var db = JS.dbGetHandle()
+            db.transaction(function (tx) {
+                tx.executeSql('INSERT INTO friend VALUES(?,?)',
+                              [profile.name, profile.description])
+            })
             friendline.push(newItem)
-            console.debug("add a friend:",profile.name)
             friendlineChanged()
+            console.debug("add a friend:", profile.name)
         }
     }
 
-    function friendremove(index){
-        friendline.splice(index,1)
+    function friendremove(index) {
+        var db = JS.dbGetHandle()
+        db.transaction(function (tx) {
+            tx.executeSql('delete from friend where chatter_name = ?',
+                          [friendline[index].text])
+        })
+        friendline.splice(index, 1)
         console.debug("remove a friend")
         friendlineChanged()
     }
 }
-
-
-
