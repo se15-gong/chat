@@ -67,7 +67,7 @@ ListPage {
         gradient: Gradient {
             GradientStop {
                 position: 0
-                color: time.t < 2 ? "white" : "blue"
+                color: time.t < 2 ? "black" : "grey"
 
                 Behavior on color {
                     ColorAnimation {
@@ -77,7 +77,7 @@ ListPage {
             }
             GradientStop {
                 position: 1
-                color: time.t < 2 ? "white" : "blue"
+                color: time.t < 2 ? "black" : "grey"
 
                 Behavior on color {
                     ColorAnimation {
