@@ -23,7 +23,7 @@ ListPage {
         // add the image
         Image {
             id: bgImage
-            source: "portrait0.jpg"
+            source: "1.jpg"
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
 
