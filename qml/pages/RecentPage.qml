@@ -52,9 +52,6 @@ ListPage {
                                                           DataModel.addTweet(
                                                                       text)
                                                   })
-        //    Drag.active: mousearea.drag.active
-        //    Drag.hotSpot.x: plus.width/2
-        //    Drag.hotSpot.y: plus.height/2
     }
 
     titleItem: Icon {

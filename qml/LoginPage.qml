@@ -8,11 +8,10 @@ Page {
     title: "Slecetuser"
     signal loginSucceeded
     signal loginFalsed
+    property var current
+    property var num
 
     backgroundColor: Qt.rgba(0,0,0, 0.75) // page background is translucent, we can see other items beneath the page
-
-
-    // login page is always visible if user is not logged in
 
 
 
@@ -56,6 +55,12 @@ Page {
             font.pixelSize: sp(14)
             borderColor: Theme.tintColor
             borderWidth: !Theme.isAndroid ? dp(2) : 0
+            onAccepted: {
+                if(txtUsername.text === ""){
+                    loginFalsed()
+                    cuowu.opacity = 1.0
+                }
+            }
         }
         AppText {
             text: qsTr("Passward")
@@ -72,6 +77,12 @@ Page {
             borderColor: Theme.tintColor
             borderWidth: !Theme.isAndroid ? dp(2) : 0
             echoMode: TextInput.Password
+            onAccepted: {
+                if(txtPassword.text === ""){
+                    loginFalsed()
+                    cuowu.opacity = 1.0
+                }
+            }
         }
 
         // column for buttons, we use column here to avoid additional spacing between buttons
@@ -85,7 +96,17 @@ Page {
                 color: "red"
                 font.pixelSize: sp(12)
                 opacity: 0.0
-               // anchors.bottom: parent.bottom
+                // anchors.bottom: parent.bottom
+                width: content.width - sp(12)
+
+            }
+            AppText{
+                id:cuowu2
+                text:"password has wrong"
+                color: "red"
+                font.pixelSize: sp(12)
+                opacity: 0.0
+                // anchors.bottom: parent.bottom
                 width: content.width - sp(12)
 
             }
@@ -96,33 +117,40 @@ Page {
                 flat: false
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: {
-                    if(txtUsername.text === "" || txtPassword.text === ""){
+                    current = {
+                        name:txtUsername.text,
+                        password:txtPassword.text
+                    }
+
+                    DataModel.dbInit(current)
+                    num = DataModel.code
+
+                    if( (num === 0) || (num === 2) )
+                    {
+                        loginPage.forceActiveFocus()
+                        console.debug("DB has init.")
+                        console.debug("logging in ...")
+                        loginSucceeded()
+                        //cuowu.opacity = 0.0
+                        //cuowu2.opacity =0.0
+                        //txtPassword.text = ""
+                        console.debug("num:",num)
+                    }
+
+                    else
+                    {
                         loginFalsed()
-                        cuowu.opacity = 1.0
-
-                    }else{
-                    loginPage.forceActiveFocus() // move focus away from text fields
-
-                    // simulate successful login
-                    console.debug("logging in ...")
-                    loginSucceeded()
-                        cuowu.opacity = 0.0
-                        txtPassword.text = ""
-
-                }
+                        cuowu2.opacity = 1.0
+                        //cuowu.opacity = 0.0
+                        console.debug("num:",num)
+                    }
                 }
 
 
             }
-
-
         }
-
-
-
-
-
     }
-
 }
+
+
 

@@ -33,6 +33,7 @@ ListPage {
         // jump to main page after logout
         navigation.currentIndex = 0
         navigation.currentNavigationItem.navigationStack.popAllExceptFirst()
+        Qt.quit()
     }
 
     titleItem: Column {
@@ -42,7 +43,7 @@ ListPage {
         AppText {
             //白色名字  最上方
             anchors.horizontalCenter: Theme.isAndroid ? undefined : parent.horizontalCenter
-            text: profilePage.profile.name
+            text: DataModel.currentProfile.name
             color: "white"
             font.family: Theme.boldFont.name
             font.bold: true
@@ -139,24 +140,39 @@ ListPage {
                         spacing: dp(4)
 
                         AppText {
-                            text: profile.name
+                            text: DataModel.currentProfile.name
                             font.pixelSize: sp(16)
                             font.bold: true
+
                         }
 
-                        AppText {
-                            text: "@" + profile.screen_name
+                        AppTextField {
+                            id:screen_name_text
+                            text:DataModel.currentProfile.screen_name
                             font.pixelSize: sp(12)
-                            color: Theme.secondaryTextColor
+                            backgroundColor: Theme.secondaryTextColor
+                            opacity: 0.5
+                            onAccepted: {
+                                if(screen_name_text.text !== DataModel.currentProfile.screen_name)
+                                    DataModel.upuser_screen_name(screen_name_text.text)
+                            }
                         }
                     }
 
-                    AppText {
-                        text: profile.description
+                    AppTextField {
+                        id:description_text
+                        text: DataModel.currentProfile.description
                         width: parent.width
-                        wrapMode: Text.WordWrap
+                        //                        wrapMode: Text.WordWrap
                         font.pixelSize: sp(12)
-                        lineHeight: 1.3
+                        //                        lineHeight: 1.3
+                        height: dp(33)
+                        opacity: 0.5
+                        onAccepted: {
+                            if(description_text.text !== DataModel.currentProfile.description)
+                                DataModel.upuser_description(description_text.text)
+                        }
+
                     }
 
                     Flow {
@@ -170,13 +186,18 @@ ListPage {
                             visible: profileLocation.visible
                         }
 
-                        Text {
-                            id: profileLocation
-                            text: profile.location
-                            visible: !!profile.location
+                        AppTextField {
+                            id: location_text
+                            text: DataModel.currentProfile.location
+//                            visible: !!DataModel.currentProfile.location
                             font.family: Theme.normalFont.name
                             font.pixelSize: sp(12)
-                            color: Theme.textColor
+                            backgroundColor: Theme.secondaryTextColor
+                            opacity: 0.5
+                            onAccepted: {
+                                if(location_text.text !== DataModel.currentProfile.location)
+                                    DataModel.upuser_location(location_text.text)
+                            }
                         }
                     }
                 }

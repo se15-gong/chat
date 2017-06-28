@@ -8,11 +8,6 @@ import "../model"
 ListPage {
     id: page
     readonly property real barHeight: dp(Theme.navigationBar.height) + Theme.statusBarHeight
-    //    property var friend: [{
-    //            text: "Jin Chen",
-    //            detailText: "hello!",
-    //            image: Qt.resolvedUrl("portrait0.jpg")
-    //        }]
     navigationBarTranslucency: 1.0
     listView.anchors.topMargin: barHeight
 

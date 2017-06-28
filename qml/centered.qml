@@ -13,7 +13,7 @@ Item {
     radius: 0
     anchors.fill: parent
     fillMode: Image.PreserveAspectCrop
-    border.width: 0
+//    border.width: 0
     source: profile ? profile.profile_banner_url : ""
 
     Column {

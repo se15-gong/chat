@@ -11,12 +11,6 @@ import "./model"
 Page {
     id: mainpage
     signal isme
-
-    Component.onCompleted: {
-        DataModel.dbInit()
-        console.debug("DB has init.")
-
-    }
     Component {
         id: profile
         PersonalPage {

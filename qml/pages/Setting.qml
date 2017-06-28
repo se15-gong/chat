@@ -12,14 +12,6 @@ ListPage
     AppFlickable {
         anchors.fill: parent
         anchors.centerIn: parent
-        contentWidth: width
-        contentHeight: content.height + content.y * 2
-        //        ListPage {
-        //            model: [{ type: "Background setting",TextButtonBarItem},
-        //                { type: "Text color", text: " " },
-        //                { type: "About me", text: "This software is written by 15se" }]
-        //            section.property: "type"
-        //        }
         ColumnLayout{
             AppText
             {

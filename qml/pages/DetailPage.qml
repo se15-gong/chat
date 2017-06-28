@@ -1,6 +1,8 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import VPlayApps 1.0
+import "../model"
+import "../widgets"
 
 Page {
     id: detailPage
@@ -37,9 +39,14 @@ Page {
                 anchors.fill: parent
 
                 onClicked: {
-                    navigationStack.push(otherprofileComponent, {
-                                             profile: tweet.user
-                                         })
+                    if (DataModel.isme(row.item.user))
+                        navigationStack.push(otherprofileComponent, {
+                                                 profile: row.item.user
+                                             })
+                    else
+                        navigationStack.push(profilePageComponent, {
+                                                 profile: row.item.user
+                                             })
                 }
             }
         }

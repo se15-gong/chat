@@ -13,6 +13,8 @@ QtObject {
     //当前用户
     property var timeline
 
+    property var code
+
     //时间线
     property var firstTweetData
 
@@ -115,14 +117,15 @@ QtObject {
     function addTweet(text) {
         //create fake tweet as copy of first tweet with new text
         var newTweet = JSON.parse(JSON.stringify(firstTweetData))
-
-        newTweet.text = text
-        currentProfile.name = text
-        timeline.splice(0, 0, tweetModel(newTweet)) //insert at position 0
+        var tww = tweetModel(newTweet)
+        tww.name = currentProfile.name
+        tww.text = text
+        tww.user = currentProfile
+        timeline.splice(0, 0, tww) //insert at position 0
         timelineChanged()
     }
 
-    function dbInit() {
+    function dbInit(current_user) {
         var db = LocalStorage.openDatabaseSync("FriendList", "",
                                                "Track exercise", 1000000)
 
@@ -136,31 +139,101 @@ QtObject {
                     detailText: results.rows.item(i).content
                 }
                 friendline.push(r)
-                console.debug("read success!")
             }
 
+
+            tx.executeSql('CREATE TABLE IF NOT EXISTS user (user_name text,screen_name text,content text,address text,password text)')
             var users = tx.executeSql('SELECT * FROM user')
-            for (var i = 0; i < users.rows.length; i++) {
+
+
+            for (var i = 0; i < users.rows.length; i++)
+            {
                 var r = {
                     name: users.rows.item(i).user_name,
                     screen_name: users.rows.item(i).screen_name,
                     description: users.rows.item(i).content,
-                    location:users.rows.item(i).address
+                    location:users.rows.item(i).address,
+                    password:users.rows.item(i).password
                 }
                 userline.push(r)
-                currentProfile = r
-                console.debug("user read success!  users.rows.length:",users.rows.length)
+                userlineChanged()
             }
+
+            for (var i = 0; i < userline.length; i++)
+            {
+                if( (current_user.name === userline[i].name) && (current_user.password === userline[i].password) )
+                {
+                    currentProfile = userline[i];
+                    console.debug("user read success!")
+                    code =  0
+                }
+                else
+                {
+                    if( (current_user.name === userline[i].name) && (current_user.password !== userline[i].password) )
+                    {
+                        console.debug("password has wrong!")
+                        code = 1
+                    }
+                    else if(current_user.name !== userline[i].name)
+                    {
+                        adduser(current_user);
+                        userline.push(r)
+                        userlineChanged()
+                        console.debug("user read success:add a new user!")
+                        code = 2;
+                    }
+                }
+            }
+            if(userline.length === 0)
+            {
+                adduser(current_user);
+                userline.push(current_user)
+                userlineChanged()
+                console.debug("userline == 0:add a new user!")
+                code = 2;
+            }
+
+        console.debug("userline length:",userline.length)
         })
     }
 
-    function useradd(user){
+    function adduser(usr)
+    {
+        var db = JS.dbGetHandle()
+        db.transaction(function(tx){
+            tx.executeSql('INSERT INTO user(user_name,password) VALUES(?,?)',[usr.name,usr.password])
+            var r = {
+                name: usr.name,
+                password:usr.password
+            }
+            currentProfile = r
+        })
+
+    }
+
+    function upuser_screen_name(name)
+    {
         var db = JS.dbGetHandle()
         db.transaction(function (tx) {
-            tx.executeSql('INSERT INTO user(user_name) VALUES(?)',
-                          [user])
+            tx.executeSql('update user set screen_name = ? where user_name = ?',[name,currentProfile.name])
         })
-        userline.push(user)
+        console.debug("update screen_name!")
+    }
+
+    function upuser_description(content){
+        var db = JS.dbGetHandle()
+        db.transaction(function (tx) {
+            tx.executeSql('update user set content = ? where user_name = ?',[content,currentProfile.name])
+        })
+        console.debug("update description!")
+    }
+
+    function upuser_location(location){
+        var db = JS.dbGetHandle()
+        db.transaction(function (tx) {
+            tx.executeSql('update user set address = ? where user_name = ?',[location,currentProfile.name])
+        })
+        console.debug("update location!")
     }
 
 
