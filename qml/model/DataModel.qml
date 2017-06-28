@@ -18,19 +18,19 @@ QtObject {
 
     //第一个推特日期
     property var friendline: []
+    property var userline: []
 
     // Load default data
     Component.onCompleted: {
         console.debug("Loading datamodel...")
-
         // Profile
-        var xhr = new XMLHttpRequest
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE)
-                currentProfile = JSON.parse(xhr.responseText)
-        }
-        xhr.open("GET", Qt.resolvedUrl("../data/user.json"))
-        xhr.send()
+        //        var xhr = new XMLHttpRequest
+        //        xhr.onreadystatechange = function () {
+        //            if (xhr.readyState === XMLHttpRequest.DONE)
+        //                currentProfile = JSON.parse(xhr.responseText)
+        //        }
+        //        xhr.open("GET", Qt.resolvedUrl("../data/user.json"))
+        //        xhr.send()
 
         // Feed
         var xhr2 = new XMLHttpRequest
@@ -50,6 +50,11 @@ QtObject {
         xhr2.open("GET", Qt.resolvedUrl("../data/feed.json"))
         xhr2.send()
     }
+
+    //    function modifycurrentprofile(newname)
+    //    {
+    //        return currentProfile.name = newname
+    //    }
 
     function isme(profile) {
         if (currentProfile.name === profile.name)
@@ -110,8 +115,9 @@ QtObject {
     function addTweet(text) {
         //create fake tweet as copy of first tweet with new text
         var newTweet = JSON.parse(JSON.stringify(firstTweetData))
-        newTweet.user = currentProfile
+
         newTweet.text = text
+        currentProfile.name = text
         timeline.splice(0, 0, tweetModel(newTweet)) //insert at position 0
         timelineChanged()
     }
@@ -132,8 +138,31 @@ QtObject {
                 friendline.push(r)
                 console.debug("read success!")
             }
+
+            var users = tx.executeSql('SELECT * FROM user')
+            for (var i = 0; i < users.rows.length; i++) {
+                var r = {
+                    name: users.rows.item(i).user_name,
+                    screen_name: users.rows.item(i).screen_name,
+                    description: users.rows.item(i).content,
+                    location:users.rows.item(i).address
+                }
+                userline.push(r)
+                currentProfile = r
+                console.debug("user read success!  users.rows.length:",users.rows.length)
+            }
         })
     }
+
+    function useradd(user){
+        var db = JS.dbGetHandle()
+        db.transaction(function (tx) {
+            tx.executeSql('INSERT INTO user(user_name) VALUES(?)',
+                          [user])
+        })
+        userline.push(user)
+    }
+
 
     function friendadd(profile) {
         var isadd = true

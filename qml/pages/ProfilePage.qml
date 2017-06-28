@@ -10,9 +10,7 @@ import "../pages"
 ListPage {
     id: profilePage
 
-    //    property var additem: chatrow.item
 
-    // The actual profile data to display
     property var profile
 
     readonly property real barHeight: dp(Theme.navigationBar.height) + Theme.statusBarHeight
@@ -180,61 +178,6 @@ ListPage {
                             font.pixelSize: sp(12)
                             color: Theme.textColor
                         }
-
-                        Icon {
-                            icon: IconType.link
-                            size: dp(12)
-                            color: Theme.secondaryTextColor
-                            visible: profileUrl.visible
-                        }
-
-                        Text {
-                            id: profileUrl
-                            text: profile.entities.url
-                                  && profile.entities.url.urls[0].display_url
-                                  || ""
-                            visible: !!profile.entities.url
-                            font.family: Theme.normalFont.name
-                            font.pixelSize: sp(12)
-                            color: Theme.textColor
-                        }
-                    }
-
-                    Flow {
-                        spacing: dp(6)
-                        width: parent.width
-
-                        Text {
-                            text: profile.friends_count
-                            font.family: Theme.normalFont.name
-                            font.bold: true
-                            font.pixelSize: sp(12)
-                            color: Theme.textColor
-                        }
-
-                        Text {
-                            text: qsTr("Following")
-                            font.family: Theme.normalFont.name
-                            font.pixelSize: sp(12)
-                            font.capitalization: Font.AllUppercase
-                            color: Theme.secondaryTextColor
-                        }
-
-                        Text {
-                            text: profile.followers_count
-                            font.family: Theme.normalFont.name
-                            font.bold: true
-                            font.pixelSize: sp(12)
-                            color: Theme.textColor
-                        }
-
-                        Text {
-                            text: qsTr("Followers")
-                            font.family: Theme.normalFont.name
-                            font.pixelSize: sp(12)
-                            font.capitalization: Font.AllUppercase
-                            color: Theme.secondaryTextColor
-                        }
                     }
                 }
             }
@@ -264,12 +207,10 @@ ListPage {
         id: behand
         color: "blue"
         width: parent.width
-        //    height: dp(140)
         y: parent.height - height
     }
     FloatingActionButton {
         icon: IconType.remove
-        // anchors.: parent.bottom
         visible: true
         onClicked: logoutClicked()
     }
