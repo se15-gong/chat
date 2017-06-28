@@ -19,7 +19,7 @@ ListPage {
         // add the image
         Image {
             id: bgImage
-            source: "1.jpg"
+            source: ".1.jpg"
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
 
@@ -48,7 +48,7 @@ ListPage {
     AppTabBar {
         id: apptabbar
         contentContainer: swipeview
-        opacity: 0
+        opacity: 2
         AppTabButton {
             text: "profile"
             icon: IconType.anchor
