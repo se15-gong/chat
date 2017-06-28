@@ -29,6 +29,13 @@ ListPage {
     backgroundColor: "white"
 
     navigationBarTranslucency: 1.0 // navigation bar is 100 percent translucent for this page
+    signal logoutClicked
+    onLogoutClicked: {
+        userLoggedIn = false
+        // jump to main page after logout
+        navigation.currentIndex = 0
+        navigation.currentNavigationItem.navigationStack.popAllExceptFirst()
+    }
 
     titleItem: Column {
         // Fade title item in depdending on scroll state
@@ -259,5 +266,11 @@ ListPage {
         width: parent.width
         //    height: dp(140)
         y: parent.height - height
+    }
+    FloatingActionButton {
+        icon: IconType.remove
+        // anchors.: parent.bottom
+        visible: true
+        onClicked: logoutClicked()
     }
 }
