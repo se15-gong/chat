@@ -125,15 +125,12 @@ Page {
                     DataModel.dbInit(current)
                     num = DataModel.code
 
-                    if( (num === 0) || (num === 2) )
+                    if( (num === 0) || (num === 2) || (num === 3) )
                     {
                         loginPage.forceActiveFocus()
                         console.debug("DB has init.")
                         console.debug("logging in ...")
                         loginSucceeded()
-                        //cuowu.opacity = 0.0
-                        //cuowu2.opacity =0.0
-                        //txtPassword.text = ""
                         console.debug("num:",num)
                     }
 
@@ -141,12 +138,12 @@ Page {
                     {
                         loginFalsed()
                         cuowu2.opacity = 1.0
-                        //cuowu.opacity = 0.0
                         console.debug("num:",num)
                     }
+                    txtPassword.text=""
+                    txtUsername.text=""
+
                 }
-
-
             }
         }
     }

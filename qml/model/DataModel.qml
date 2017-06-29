@@ -10,6 +10,7 @@ QtObject {
     id: dataModel
 
     property var currentProfile
+    property var currentuser
     //当前用户
     property var timeline
 
@@ -21,6 +22,7 @@ QtObject {
     //第一个推特日期
     property var friendline: []
     property var userline: []
+
 
     // Load default data
     Component.onCompleted: {
@@ -141,7 +143,7 @@ QtObject {
                 friendline.push(r)
             }
 
-
+            var hasuser = true;
             tx.executeSql('CREATE TABLE IF NOT EXISTS user (user_name text,screen_name text,content text,address text,password text)')
             var users = tx.executeSql('SELECT * FROM user')
 
@@ -159,41 +161,49 @@ QtObject {
                 userlineChanged()
             }
 
+            if(userline.length === 0)
+            {
+                adduser(current_user)
+                userline.push(current_user)
+                userlineChanged()
+                console.debug("userline = 0,add a new user!\n")
+                code = 2
+            }
+
             for (var i = 0; i < userline.length; i++)
             {
-                if( (current_user.name === userline[i].name) && (current_user.password === userline[i].password) )
+                if(current_user.name !== userline[i].name)
                 {
-                    currentProfile = userline[i];
-                    console.debug("user read success!")
-                    code =  0
+                    code = 3
                 }
                 else
                 {
-                    if( (current_user.name === userline[i].name) && (current_user.password !== userline[i].password) )
-                    {
-                        console.debug("password has wrong!")
-                        code = 1
-                    }
-                    else if(current_user.name !== userline[i].name)
-                    {
-                        adduser(current_user);
-                        userline.push(r)
-                        userlineChanged()
-                        console.debug("user read success:add a new user!")
-                        code = 2;
-                    }
+                    currentuser = userline[i]
+                    code = 0  //same name
+                    break
+                }
+
+            }
+            if(code === 0)
+            {
+                if(current_user.password === currentuser.password)
+                {
+                    currentProfile = current_user
+                    console.debug("exited user!\n")
+                }
+                else
+                {
+                    console.debug("password has mistake!\n")
+                    code = 1
                 }
             }
-            if(userline.length === 0)
+            else if(code === 3)
             {
-                adduser(current_user);
+                adduser(current_user)
                 userline.push(current_user)
                 userlineChanged()
-                console.debug("userline == 0:add a new user!")
-                code = 2;
+                console.debug("add a new user!\n")
             }
-
-        console.debug("userline length:",userline.length)
         })
     }
 
