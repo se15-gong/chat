@@ -102,6 +102,7 @@ ListPage {
     }
 
     listView {
+        width: parent
         z: 1
         header: Column {
             id: contentColumn
