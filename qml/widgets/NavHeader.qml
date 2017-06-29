@@ -7,7 +7,7 @@ Item {
   width: parent.width
   height: dp(120)
 
- // property var profile: DataModel.currentProfile || null
+ // property var profile: DataModel.currentProfile |
 
   RoundedImage {
     id: bgImage

@@ -11,9 +11,9 @@ Page {
     property var current
     property var num
 
-    backgroundColor: Qt.rgba(0,0,0, 0.75) // page background is translucent, we can see other items beneath the page
-
-
+    backgroundColor: Qt.rgba(
+                         0, 0, 0,
+                         0.75) // page background is translucent, we can see other items beneath the page
 
     // login form background
     Rectangle {
@@ -55,19 +55,11 @@ Page {
             font.pixelSize: sp(14)
             borderColor: Theme.tintColor
             borderWidth: !Theme.isAndroid ? dp(2) : 0
-            onAccepted: {
-                if(txtUsername.text === ""){
-                    loginFalsed()
-                    cuowu.opacity = 1.0
-                }
-            }
         }
         AppText {
             text: qsTr("Passward")
             font.pixelSize: sp(12)
         }
-
-
 
         AppTextField {
             id: txtPassword
@@ -77,12 +69,6 @@ Page {
             borderColor: Theme.tintColor
             borderWidth: !Theme.isAndroid ? dp(2) : 0
             echoMode: TextInput.Password
-            onAccepted: {
-                if(txtPassword.text === ""){
-                    loginFalsed()
-                    cuowu.opacity = 1.0
-                }
-            }
         }
 
         // column for buttons, we use column here to avoid additional spacing between buttons
@@ -90,25 +76,23 @@ Page {
             Layout.fillWidth: true
             Layout.columnSpan: 2
             Layout.topMargin: dp(12)
-            AppText{
-                id:cuowu
-                text:"plase give me name or passward"
+            AppText {
+                id: cuowu
+                text: "plase give me name or passward"
                 color: "red"
                 font.pixelSize: sp(12)
                 opacity: 0.0
                 // anchors.bottom: parent.bottom
                 width: content.width - sp(12)
-
             }
-            AppText{
-                id:cuowu2
-                text:"password has wrong"
+            AppText {
+                id: cuowu2
+                text: "password has wrong"
                 color: "red"
                 font.pixelSize: sp(12)
                 opacity: 0.0
                 // anchors.bottom: parent.bottom
                 width: content.width - sp(12)
-
             }
 
             // buttons
@@ -118,36 +102,30 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: {
                     current = {
-                        name:txtUsername.text,
-                        password:txtPassword.text
+                        name: txtUsername.text,
+                        password: txtPassword.text
                     }
-
-                    DataModel.dbInit(current)
-                    num = DataModel.code
-
-                    if( (num === 0) || (num === 2) || (num === 3) )
-                    {
-                        loginPage.forceActiveFocus()
-                        console.debug("DB has init.")
-                        console.debug("logging in ...")
-                        loginSucceeded()
-                        console.debug("num:",num)
-                    }
-
-                    else
-                    {
+                    if (txtPassword.text === "" || txtUsername.text === "") {
                         loginFalsed()
-                        cuowu2.opacity = 1.0
-                        console.debug("num:",num)
-                    }
-                    txtPassword.text=""
-                    txtUsername.text=""
+                        cuowu.opacity = 1.0
+                    } else {
+                        DataModel.dbInit(current)
+                        num = DataModel.code
 
+                        if ((num === 0) || (num === 2) || (num === 3)) {
+                            loginPage.forceActiveFocus()
+                            console.debug("DB has init.")
+                            console.debug("logging in ...")
+                            loginSucceeded()
+                            console.debug("num:", num)
+                        } else {
+                            loginFalsed()
+                            cuowu2.opacity = 1.0
+                            console.debug("num:", num)
+                        }
+                    }
                 }
             }
         }
     }
 }
-
-
-

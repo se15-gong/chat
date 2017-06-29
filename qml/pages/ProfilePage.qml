@@ -1,6 +1,6 @@
 import QtQuick 2.3
 import VPlayApps 1.0
-
+import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 
 import "../model"
@@ -9,7 +9,6 @@ import "../pages"
 
 ListPage {
     id: profilePage
-
 
     property var profile
 
@@ -35,6 +34,10 @@ ListPage {
         navigation.currentNavigationItem.navigationStack.popAllExceptFirst()
         Qt.quit()
     }
+    Image {
+        source: "5.jpg"
+        z: 0
+    }
 
     titleItem: Column {
         // Fade title item in depdending on scroll state
@@ -49,16 +52,6 @@ ListPage {
             font.bold: true
             font.pixelSize: dp(14)
         }
-
-        AppText {
-            //发的微博数
-            anchors.horizontalCenter: Theme.isAndroid ? undefined : parent.horizontalCenter
-            text: qsTr("%1 Tweets").arg(
-                      profilePage.profile.statuses_count.toLocaleString(
-                          Qt.locale(), "f", 0))
-            color: "white"
-            font.pixelSize: dp(10)
-        }
     }
 
     Rectangle {
@@ -70,10 +63,13 @@ ListPage {
            > 0 ? -Math.min(listView.contentY + listView.headerItem.height,
                            height - barHeight) : 0
 
+        width: parent.width
+        height: dp(140)
+
         gradient: Gradient {
             GradientStop {
                 position: 0
-                color: time.t < 2 ? "black" : "grey"
+                color: time.t < 2 ? "#191970" : "grey"
 
                 Behavior on color {
                     ColorAnimation {
@@ -83,7 +79,7 @@ ListPage {
             }
             GradientStop {
                 position: 1
-                color: time.t < 2 ? "black" : "grey"
+                color: time.t < 2 ? "#191970" : "grey"
 
                 Behavior on color {
                     ColorAnimation {
@@ -92,10 +88,6 @@ ListPage {
                 }
             }
         }
-
-        // ColorAnimation on color { to:"white";loops: Animation.Infinite; duration: 1500}
-        width: parent.width
-        height: dp(140)
 
         // Profile image
         RoundedImage {
@@ -110,7 +102,7 @@ ListPage {
     }
 
     listView {
-
+        z: 1
         header: Column {
             id: contentColumn
 
@@ -124,9 +116,15 @@ ListPage {
 
             // Profile details
             Rectangle {
+
                 width: parent.width
                 height: profileContent.height + dp(10) + profileContent.y
-                color: "yellow"
+
+                Image {
+                    id: background
+                    source: "4.jpg"
+                    opacity: 1
+                }
 
                 Column {
                     id: profileContent
@@ -141,73 +139,78 @@ ListPage {
 
                         AppText {
                             text: DataModel.currentProfile.name
-                            font.pixelSize: sp(16)
+                            font.pixelSize: sp(36)
                             font.bold: true
-
                         }
+                        GridLayout {
+                            AppText {
+                                text: qsTr("Screen_Name:")
+                                font.pixelSize: sp(12)
+                            }
 
-                        AppTextField {
-                            id:screen_name_text
-                            text:DataModel.currentProfile.screen_name
-                            font.pixelSize: sp(12)
-                            backgroundColor: Theme.secondaryTextColor
-                            opacity: 0.5
-                            onAccepted: {
-                                if(screen_name_text.text !== DataModel.currentProfile.screen_name)
-                                    DataModel.upuser_screen_name(screen_name_text.text)
+                            AppTextField {
+                                id: screen_name_text
+                                text: DataModel.currentProfile.screen_name
+                                font.pixelSize: sp(12)
+                                backgroundColor: Theme.secondaryTextColor
+                                opacity: 0.5
+                                onAccepted: {
+                                    if (screen_name_text.text
+                                            !== DataModel.currentProfile.screen_name)
+                                        DataModel.upuser_screen_name(
+                                                    screen_name_text.text)
+                                }
                             }
                         }
-                    }
 
-                    AppTextField {
-                        id:description_text
-                        text: DataModel.currentProfile.description
-                        width: parent.width
-                        //                        wrapMode: Text.WordWrap
-                        font.pixelSize: sp(12)
-                        //                        lineHeight: 1.3
-                        height: dp(33)
-                        opacity: 0.5
-                        onAccepted: {
-                            if(description_text.text !== DataModel.currentProfile.description)
-                                DataModel.upuser_description(description_text.text)
-                        }
-
-                    }
-
-                    Flow {
-                        spacing: dp(6)
-                        width: parent.width
-
-                        Icon {
-                            icon: IconType.mapmarker
-                            size: dp(12)
-                            color: Theme.secondaryTextColor
-                            visible: profileLocation.visible
-                        }
-
-                        AppTextField {
-                            id: location_text
-                            text: DataModel.currentProfile.location
-//                            visible: !!DataModel.currentProfile.location
-                            font.family: Theme.normalFont.name
+                        AppText {
+                            text: qsTr("Description:")
                             font.pixelSize: sp(12)
-                            backgroundColor: Theme.secondaryTextColor
+                        }
+                        AppTextField {
+                            id: description_text
+                            text: DataModel.currentProfile.description
+                            width: parent.width
+                            font.pixelSize: sp(12)
+                            borderColor: Theme.secondaryTextColor
+                            //lineHeight: 1.3
+                            height: dp(33)
                             opacity: 0.5
                             onAccepted: {
-                                if(location_text.text !== DataModel.currentProfile.location)
-                                    DataModel.upuser_location(location_text.text)
+                                if (description_text.text !== DataModel.currentProfile.description)
+                                    DataModel.upuser_description(
+                                                description_text.text)
+                            }
+                        }
+
+                        Flow {
+                            spacing: dp(6)
+                            width: parent.width
+
+                            Icon {
+                                icon: IconType.mapmarker
+                                size: dp(12)
+                                color: Theme.secondaryTextColor
+                                visible: profileLocation.visible
+                            }
+
+                            AppTextField {
+                                id: location_text
+                                text: DataModel.currentProfile.location
+                                //                            visible: !!DataModel.currentProfile.location
+                                font.bold: true
+                                font.pixelSize: sp(12)
+                                backgroundColor: Theme.secondaryTextColor
+                                opacity: 0.5
+                                onActiveFocusChanged: {
+                                    if (location_text.text !== DataModel.currentProfile.location)
+                                        DataModel.upuser_location(
+                                                    location_text.text)
+                                }
                             }
                         }
                     }
                 }
-            }
-
-            Rectangle {
-                y: parent.height - height
-                width: parent.width
-                height: 1
-                color: Theme.dividerColor
             }
 
             Timer {
@@ -231,6 +234,7 @@ ListPage {
         y: parent.height - height
     }
     FloatingActionButton {
+        z: 1
         icon: IconType.remove
         visible: true
         onClicked: logoutClicked()

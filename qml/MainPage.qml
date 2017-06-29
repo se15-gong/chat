@@ -47,8 +47,13 @@ Page {
     Navigation {
         id: navigation
         drawer.drawerPosition: drawer.drawerPositionLeft
-        headerView: NavHeader {
-        }
+        headerView:  AppImage {
+            width: parent.width
+            fillMode: AppImage.PreserveAspectFit
+            source: "./background.png"
+            anchors.verticalCenter: parent.verticalCenter
+          }
+
         footerView: Bottom {
         }
 
@@ -81,3 +86,4 @@ Page {
         }
     }
 }
+

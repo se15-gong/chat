@@ -8,7 +8,7 @@ import "../pages"
 ListPage {
 
     readonly property real barHeight: dp(Theme.navigationBar.height) + Theme.statusBarHeight
-    navigationBarTranslucency: 0.0
+    navigationBarTranslucency: 1.0
     listView.anchors.topMargin: barHeight
     Rectangle {
         id: background
@@ -19,7 +19,7 @@ ListPage {
         // add the image
         Image {
             id: bgImage
-            source: ".1.jpg"
+            source: "1.jpg"
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
 
@@ -48,7 +48,7 @@ ListPage {
     AppTabBar {
         id: apptabbar
         contentContainer: swipeview
-        opacity: 2
+        opacity: 0
         AppTabButton {
             text: "profile"
             icon: IconType.anchor

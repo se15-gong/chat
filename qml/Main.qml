@@ -1,6 +1,7 @@
 import VPlayApps 1.0
 import QtQuick 2.0
-
+import VPlay 2.0
+import QtGraphicalEffects 1.0
 App {
     id: app
     property bool userLoggedIn: false

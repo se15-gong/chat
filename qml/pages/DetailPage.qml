@@ -39,13 +39,13 @@ Page {
                 anchors.fill: parent
 
                 onClicked: {
-                    if (DataModel.isme(row.item.user))
+                    if (DataModel.isme(tweet.item.user))
                         navigationStack.push(otherprofileComponent, {
-                                                 profile: row.item.user
+                                                 profile: tweet.item.user
                                              })
                     else
                         navigationStack.push(profilePageComponent, {
-                                                 profile: row.item.user
+                                                 profile: tweet.item.user
                                              })
                 }
             }

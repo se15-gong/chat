@@ -23,7 +23,6 @@ QtObject {
     property var friendline: []
     property var userline: []
 
-
     // Load default data
     Component.onCompleted: {
         console.debug("Loading datamodel...")
@@ -59,7 +58,6 @@ QtObject {
     //    {
     //        return currentProfile.name = newname
     //    }
-
     function isme(profile) {
         if (currentProfile.name === profile.name)
             return false
@@ -143,26 +141,24 @@ QtObject {
                 friendline.push(r)
             }
 
-            var hasuser = true;
-            tx.executeSql('CREATE TABLE IF NOT EXISTS user (user_name text,screen_name text,content text,address text,password text)')
+            var hasuser = true
+            tx.executeSql(
+                        'CREATE TABLE IF NOT EXISTS user (user_name text,screen_name text,content text,address text,password text)')
             var users = tx.executeSql('SELECT * FROM user')
 
-
-            for (var i = 0; i < users.rows.length; i++)
-            {
+            for (var i = 0; i < users.rows.length; i++) {
                 var r = {
                     name: users.rows.item(i).user_name,
                     screen_name: users.rows.item(i).screen_name,
                     description: users.rows.item(i).content,
-                    location:users.rows.item(i).address,
-                    password:users.rows.item(i).password
+                    location: users.rows.item(i).address,
+                    password: users.rows.item(i).password
                 }
                 userline.push(r)
                 userlineChanged()
             }
 
-            if(userline.length === 0)
-            {
+            if (userline.length === 0) {
                 adduser(current_user)
                 userline.push(current_user)
                 userlineChanged()
@@ -170,35 +166,25 @@ QtObject {
                 code = 2
             }
 
-            for (var i = 0; i < userline.length; i++)
-            {
-                if(current_user.name !== userline[i].name)
-                {
+            for (var i = 0; i < userline.length; i++) {
+                if (current_user.name !== userline[i].name) {
                     code = 3
-                }
-                else
-                {
+                } else {
                     currentuser = userline[i]
-                    code = 0  //same name
+                    code = 0 //same name
                     break
                 }
-
             }
-            if(code === 0)
-            {
-                if(current_user.password === currentuser.password)
-                {
-                    currentProfile = current_user
+            if (code === 0) {
+                if (current_user.password === currentuser.password) {
+                    currentProfile = currentuser
                     console.debug("exited user!\n")
-                }
-                else
-                {
+                    console.debug("1:", currentProfile.location)
+                } else {
                     console.debug("password has mistake!\n")
                     code = 1
                 }
-            }
-            else if(code === 3)
-            {
+            } else if (code === 3) {
                 adduser(current_user)
                 userline.push(current_user)
                 userlineChanged()
@@ -207,45 +193,46 @@ QtObject {
         })
     }
 
-    function adduser(usr)
-    {
+    function adduser(usr) {
         var db = JS.dbGetHandle()
-        db.transaction(function(tx){
-            tx.executeSql('INSERT INTO user(user_name,password) VALUES(?,?)',[usr.name,usr.password])
+        db.transaction(function (tx) {
+            tx.executeSql('INSERT INTO user(user_name,password) VALUES(?,?)',
+                          [usr.name, usr.password])
             var r = {
                 name: usr.name,
-                password:usr.password
+                password: usr.password
             }
             currentProfile = r
         })
-
     }
 
-    function upuser_screen_name(name)
-    {
+    function upuser_screen_name(name) {
         var db = JS.dbGetHandle()
         db.transaction(function (tx) {
-            tx.executeSql('update user set screen_name = ? where user_name = ?',[name,currentProfile.name])
+            tx.executeSql(
+                        'update user set screen_name = ? where user_name = ?',
+                        [name, currentProfile.name])
         })
         console.debug("update screen_name!")
     }
 
-    function upuser_description(content){
+    function upuser_description(content) {
         var db = JS.dbGetHandle()
         db.transaction(function (tx) {
-            tx.executeSql('update user set content = ? where user_name = ?',[content,currentProfile.name])
+            tx.executeSql('update user set content = ? where user_name = ?',
+                          [content, currentProfile.name])
         })
         console.debug("update description!")
     }
 
-    function upuser_location(location){
+    function upuser_location(location) {
         var db = JS.dbGetHandle()
         db.transaction(function (tx) {
-            tx.executeSql('update user set address = ? where user_name = ?',[location,currentProfile.name])
+            tx.executeSql('update user set address = ? where user_name = ?',
+                          [location, currentProfile.name])
         })
         console.debug("update location!")
     }
-
 
     function friendadd(profile) {
         var isadd = true
