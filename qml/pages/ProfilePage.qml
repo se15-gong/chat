@@ -36,6 +36,8 @@ ListPage {
     }
     Image {
         source: "5.jpg"
+        width: parent.width
+        height: parent.height
         z: 0
     }
 
@@ -102,7 +104,7 @@ ListPage {
     }
 
     listView {
-        width: parent
+        width: parent.width
         z: 1
         header: Column {
             id: contentColumn
@@ -124,6 +126,8 @@ ListPage {
                 Image {
                     id: background
                     source: "4.jpg"
+                    width: parent.width
+                    height: profilePage.height
                     opacity: 1
                 }
 
@@ -192,7 +196,7 @@ ListPage {
                                 icon: IconType.mapmarker
                                 size: dp(12)
                                 color: Theme.secondaryTextColor
-                                visible: profileLocation.visible
+//                                visible: profileLocation.visible
                             }
 
                             AppTextField {

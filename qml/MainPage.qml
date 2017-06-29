@@ -47,9 +47,9 @@ Page {
     Navigation {
         id: navigation
         drawer.drawerPosition: drawer.drawerPositionLeft
-        headerView:  Image {
+        headerView:  AppImage {
             width: parent.width
-            fillMode: Image.PreserveAspectFit
+            fillMode: AppImage.PreserveAspectFit
             source: "./background.png"
             anchors.verticalCenter: parent.verticalCenter
           }

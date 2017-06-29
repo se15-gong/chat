@@ -6,6 +6,7 @@ import "../model"
 import "../pages"
 
 ListPage {
+    id:page
 
     readonly property real barHeight: dp(Theme.navigationBar.height) + Theme.statusBarHeight
     navigationBarTranslucency: 1.0
@@ -22,6 +23,7 @@ ListPage {
             source: "1.jpg"
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
+            height: page.barHeight
 
             // the blur effect displays the image, we set the source image invisible
             visible: true
@@ -46,6 +48,7 @@ ListPage {
 
     //icon: IconType.github
     AppTabBar {
+        height: page.barHeight
         id: apptabbar
         contentContainer: swipeview
         opacity: 0
