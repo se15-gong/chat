@@ -7,7 +7,7 @@ import "../widgets"
 Page {
     id: detailPage
 
-    title: qsTr("Tweet")
+    title: qsTr("Moments")
     backgroundColor: "white"
 
     property var tweet
@@ -39,13 +39,13 @@ Page {
                 anchors.fill: parent
 
                 onClicked: {
-                    if (DataModel.isme(tweet.item.user))
+                    if (DataModel.isme(tweet.user))
                         navigationStack.push(otherprofileComponent, {
-                                                 profile: tweet.item.user
+                                                 profile: tweet.user
                                              })
                     else
                         navigationStack.push(profilePageComponent, {
-                                                 profile: tweet.item.user
+                                                 profile: tweet.user
                                              })
                 }
             }
@@ -128,7 +128,7 @@ Page {
             }
 
             Text {
-                text: qsTr("Retweets")
+                text: qsTr("Rechatters")
                 font.family: Theme.normalFont.name
                 font.pixelSize: sp(14)
                 font.capitalization: Font.AllUppercase

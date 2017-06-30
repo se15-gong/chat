@@ -72,13 +72,13 @@ ListPage {
             }
         }
         rightOption: SwipeButton {
-            text: "Exit"
+            text: "Delete"
             height: parent.height
             textColor: "white"
             backgroundColor: "red"
             onClicked: {
                 DataModel.friendremove(index)
-                console.debug("Exit!")
+                console.debug("Delete!")
             }
         }
     }

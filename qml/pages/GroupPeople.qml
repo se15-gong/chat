@@ -113,6 +113,24 @@ ListPage {
         inputBox.text = ""
         listView.positionViewAtEnd()
       }
+      AppButton{
+          icon:IconType.paperplane
+          visible: true
+          anchors.topMargin:inputBox.top
+          anchors.right: inputBox.right
+          onClicked: {
+              if(!inputBox.text)
+                  inputBox.placeholderText = "You can't enter none!"
+              else
+              {
+                newMsgs = newMsgs.concat({me: true, text: inputBox.text});
+                inputBox.placeholderText = ""
+              }
+
+            inputBox.text = ""
+            listView.positionViewAtEnd()
+          }
+      }
     }
 
 }

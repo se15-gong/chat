@@ -57,7 +57,7 @@ Page {
             borderWidth: !Theme.isAndroid ? dp(2) : 0
         }
         AppText {
-            text: qsTr("Passward")
+            text: qsTr("Password")
             font.pixelSize: sp(12)
         }
 
@@ -78,7 +78,7 @@ Page {
             Layout.topMargin: dp(12)
             AppText {
                 id: cuowu
-                text: "plase give me name or passward"
+                text: "plase give me name or password"
                 color: "red"
                 font.pixelSize: sp(12)
                 opacity: 0.0
